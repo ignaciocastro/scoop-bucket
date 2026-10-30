@@ -7,9 +7,7 @@
     "hash": "a19bf3abcfa044acea7bbea80088da02cfe2453c3dd6f8da038912d7a7ede6ef",
     "pre_install": [
         "ensure \"$persist_dir\" | Out-Null",
-        "if (!(Test-Path \"$persist_dir\\apps.json\") -or (Get-Item \"$persist_dir\\apps.json\").Length -eq 0) { Set-Content \"$persist_dir\\apps.json\" '{\"apps\":[]}' -Encoding UTF8 }",
-        "if (!(Test-Path \"$persist_dir\\settings.json\") -or (Get-Item \"$persist_dir\\settings.json\").Length -eq 0) { Set-Content \"$persist_dir\\settings.json\" '{}' -Encoding UTF8 }",
-        "Copy-Item \"$persist_dir\\apps.json\", \"$persist_dir\\settings.json\" -Destination \"$dir\" -Force -ErrorAction SilentlyContinue"
+        "Get-ChildItem \"$persist_dir\\*\" -Include 'apps.json', 'settings.json' | Where-Object { $_.Length -gt 0 } | Copy-Item -Destination \"$dir\" -Force -ErrorAction SilentlyContinue"
     ],
     "shortcuts": [
         [
