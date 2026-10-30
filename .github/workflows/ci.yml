@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  checks:
+    name: Checks
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check manifests
+        uses: scoopinstaller/github-actions@main
+        env:
+          ACTION: check_manifest
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

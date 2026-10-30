@@ -1,0 +1,38 @@
+{
+    "version": "3.5.1",
+    "description": "A modern launcher for downloading, installing, and running apps from GitHub and GitLab releases.",
+    "homepage": "https://quiverlauncher.com/",
+    "license": "MIT",
+    "url": "https://github.com/tgeorgiadis/quiver-launcher/releases/download/v3.5.1/QuiverLauncher-win-Portable.zip",
+    "hash": "a19bf3abcfa044acea7bbea80088da02cfe2453c3dd6f8da038912d7a7ede6ef",
+    "pre_install": [
+        "ensure \"$persist_dir\" | Out-Null",
+        "if (!(Test-Path \"$persist_dir\\apps.json\") -or (Get-Item \"$persist_dir\\apps.json\").Length -eq 0) { Set-Content \"$persist_dir\\apps.json\" '{\"apps\":[]}' -Encoding UTF8 }",
+        "if (!(Test-Path \"$persist_dir\\settings.json\") -or (Get-Item \"$persist_dir\\settings.json\").Length -eq 0) { Set-Content \"$persist_dir\\settings.json\" '{}' -Encoding UTF8 }",
+        "Copy-Item \"$persist_dir\\apps.json\", \"$persist_dir\\settings.json\" -Destination \"$dir\" -Force -ErrorAction SilentlyContinue"
+    ],
+    "shortcuts": [
+        [
+            "QuiverLauncher.exe",
+            "Quiver Launcher"
+        ]
+    ],
+    "persist": [
+        "Apps",
+        "Cache"
+    ],
+    "uninstaller": {
+        "script": [
+            "Get-ChildItem \"$dir\\*\" -Include 'apps.json', 'settings.json' | Where-Object { $_.Length -gt 0 } | Copy-Item -Destination \"$persist_dir\" -Force -ErrorAction SilentlyContinue"
+        ]
+    },
+    "post_uninstall": [
+        "Get-ChildItem \"$dir\\*\" -Include 'apps.json', 'settings.json' | Where-Object { $_.Length -gt 0 } | Copy-Item -Destination \"$persist_dir\" -Force -ErrorAction SilentlyContinue"
+    ],
+    "checkver": {
+        "github": "https://github.com/tgeorgiadis/quiver-launcher"
+    },
+    "autoupdate": {
+        "url": "https://github.com/tgeorgiadis/quiver-launcher/releases/download/v$version/QuiverLauncher-win-Portable.zip"
+    }
+}
